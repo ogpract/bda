@@ -33,5 +33,5 @@ perform_continuous_query <- function(data, cylinder_count = 6, interval = 5) {
     Sys.sleep(interval)
   }
 }
-perform_continuous_query(mtcars, cylinder_count = 6)
+perform_continuous_query(mtcars, cylinder_count = 6)
 ```
