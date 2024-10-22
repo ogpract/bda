@@ -41,3 +41,7 @@ for i, item in enumerate(dataset):
 
 print(f"\nMaximum Number of Trailing Zeros: {max_zeros}")
 print(f"Estimated Number of Distinct Elements: {estimated_distinct_count}")
+
+
+# Enter the dataset : 1,2,3,4,5,6,7,8,1
+# Enter the hash function like '(6*x + 3) % 5': (6*x + 1) % 5 
