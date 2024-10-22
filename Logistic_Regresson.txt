@@ -1,0 +1,21 @@
+library(ggplot2)
+library(dplyr)
+library(scales) 
+set.seed(123)
+
+x <- seq(-100, 100, length.out = 40) 
+probability <- 1 / (1 + exp(-(0.05 * x + 1))) 
+y <- rbinom(40, size = 1, prob = probability) 
+
+data <- data.frame(x = x, y = as.factor(y)) 
+
+logit_model <- glm(y ~ x, data = data, family = "binomial")
+
+data$predicted_prob <- predict(logit_model, type = "response")
+
+ggplot(data, aes(x = x, y = as.numeric(as.character(y)))) +
+  geom_point() +
+  geom_line(aes(y = predicted_prob), color = "blue", size = 1) + # Plot the sigmoid curve
+  scale_y_continuous(labels = percent_format(accuracy = 1)) + # Show y-axis in percentage
+  labs(title = "Logistic Regression with Sigmoid Curve", x = "X", y = "Probability") +
+  theme_minimal()

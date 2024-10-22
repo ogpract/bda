@@ -1,0 +1,21 @@
+library(ggplot2)
+library(dplyr)
+set.seed(123)
+
+x1 <- rnorm(10, mean = 50, sd = 10)  
+x2 <- rnorm(10, mean = 30, sd = 5)   
+y <- 5 + 0.4 * x1 + 0.6 * x2 + rnorm(10, mean = 0, sd = 3)  
+
+data <- data.frame(x1 = x1, x2 = x2, y = y)
+
+multi_reg_model <- lm(y ~ x1 + x2, data = data)
+
+summary(multi_reg_model)
+
+ggplot(data) +
+  geom_point(aes(x = x1, y = y), color = "blue") +  
+  geom_smooth(aes(x = x1, y = y), method = "lm", se = FALSE, color = "blue") +  
+  geom_point(aes(x = x2, y = y), color = "green") +  
+  geom_smooth(aes(x = x2, y = y), method = "lm", se = FALSE, color = "green") +  
+  labs(title = "Multiple Regression: x1 vs y and x2 vs y", x = "x1 and x2", y = "y") +
+  theme_minimal()

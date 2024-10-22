@@ -1,0 +1,18 @@
+library(ggplot2)
+
+# Data
+x <- c(1, 3, 4, 6, 7, 8, 9, 11, 13, 14, 15, 17)
+y <- c(4.1, 6.3, 9, 12, 14, 15.7, 18.2, 21, 23.1, 26.9, 27.5, 35.0)
+data <- data.frame(x = x, y = y)
+
+model <- lm(y ~ x, data = data)
+summary(model)
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_point(color = "blue", size = 3) +  
+  geom_smooth(method = "lm", se = FALSE, color = "red") +  
+  labs(title = "Linear Regression of y on x",
+       x = "X",
+       y = "Y") +
+  theme_minimal()  
+
