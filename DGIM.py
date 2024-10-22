@@ -1,64 +1,70 @@
-def create_dgim_buckets(data, window_size):
-    result = []
-    power = 0
+import time
 
-    # Keep only the last 'window_size' bits
-    data = data[-window_size:]
 
-    while data:
-        # Remove trailing zeros
-        while data and data[-1] == "0":
-            data = data[:-1]
+class Bucket:
+    def __init__(self, size, bits, timestamp):
+        self.size = size
+        self.bits = bits
+        self.timestamp = timestamp
 
-        if not data:
-            break
 
-        count = 0
-        string = ""
-        i = len(data) - 1
+class DGIM:
+    def __init__(self, N):
+        self.N = N
+        self.buckets = []
 
-        while i >= 0 and count < 2 ** power:
-            if data[i] == "1":
-                count += 1
-                string = data[i] + string  # Add bit to the string (to keep correct order)
-            else:
-                string = data[i] + string
-            
+    def add_bit(self, bit):
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        if bit == '1':
+            new_bucket = Bucket(1, '1', current_time)
+            self.buckets.append(new_bucket)
+            self._merge_buckets()
+        self._remove_old_buckets()
+
+    def _merge_buckets(self):
+        i = len(self.buckets) - 1
+        while i > 0:
+            if self.buckets[i].size == self.buckets[i - 1].size == self.buckets[i - 2].size:
+                self.buckets[i - 1].size *= 2
+                self.buckets[i - 1].bits = self.buckets[i -
+                                                        2].bits + self.buckets[i - 1].bits
+                del self.buckets[i - 2]
             i -= 1
 
-        if count >= 2 ** power:
-            result.append((string, 2 ** power))  # Append (bit string, bucket size)
-            power += 1
-        else:
-            result.append((string, 2 ** power))
-            break
+    def _remove_old_buckets(self):
+        total_bits = sum([bucket.size for bucket in self.buckets])
+        while total_bits > self.N:
+            total_bits -= self.buckets[0].size
+            self.buckets.pop(0)
 
-    print("Buckets:")
-    for bucket in result:
-        print(f"({bucket[0]}, Size: {bucket[1]})")
+    def estimate_ones(self):
+        total_ones = 0
+        for i in range(len(self.buckets) - 1):
+            total_ones += self.buckets[i].size
+        if self.buckets:
+            total_ones += self.buckets[-1].size // 2
+        return total_ones
 
-    print("\nVisual Representation:")
-    if result:
-        for bucket in result:
-            print(f"({bucket[0]})", end=" ")
-
-        print()
-
-        for bucket in result:
-            size = 2 ** (int(bucket[1]).bit_length() - 1)
-            print(f"Size: {size} ({len(bucket[0])})", end=" ")
-
-        print()
-    else:
-        print("No buckets created.")
-
-    return result
+    def print_buckets(self):
+        print(f"\nTotal number of buckets: {len(self.buckets)}")
+        total_ones = sum([bucket.size for bucket in self.buckets])
+        print(f"Total count of 1's in all buckets: {total_ones}")
+        print("Buckets (size, bits, timestamp):")
+        for bucket in self.buckets:
+            print(
+                f"Size: {bucket.size}, Bits: {bucket.bits}, Timestamp: {bucket.timestamp}")
 
 
-data = input("Enter the binary data string: ")
-window_size = int(input("Enter the window size: "))
+def main():
+    N = int(input("Enter the window size (N): "))
+    binary_string = input("Enter the binary string: ")
+    dgim = DGIM(N)
+    for bit in binary_string:
+        dgim.add_bit(bit)
+    estimated_ones = dgim.estimate_ones()
+    print(f"Estimated number of 1's in the last {N} bits: {estimated_ones}")
+    dgim.print_buckets()
 
-if not all(c in '01' for c in data) or window_size <= 0:
-    print("Invalid input. Please ensure the data string contains only binary digits and the window size is a positive integer.")
-else:
-    buckets = create_dgim_buckets(data, window_size)
+
+if __name__ == "__main__":
+    main()
