@@ -1,4 +1,4 @@
-<h1>1. Scatter Plot:</h1>
+<h3>1. Scatter Plot:</h3>
 
 ```bash
 # Load necessary libraries
@@ -17,7 +17,7 @@ ggplot(data, aes(x = x1, y = y)) +
   theme_minimal()
 ```
 
-<h1>2. Histogram:</h1>
+<h3>2. Histogram:</h3>
 
 ```bash
 # Load necessary libraries
@@ -35,7 +35,7 @@ ggplot(data, aes(x = y)) +
   theme_minimal()
 ```
 
-<h1>3. Box Plot:</h1>
+<h3>3. Box Plot:</h3>
 
 ```bash
 # Load necessary libraries
@@ -54,7 +54,7 @@ ggplot(data, aes(x = category, y = y, fill = category)) +
   theme_minimal()
 ```
 
-<h1>4. Bar Plot:</h1>
+<h3>4. Bar Plot:</h3>
 
 ```bash
 # Load necessary libraries
@@ -72,7 +72,7 @@ ggplot(data, aes(x = category, fill = category)) +
   theme_minimal()
 ```
 
-<h1>5. Density Plot:</h1>
+<h3>5. Density Plot:</h3>
 
 ```bash
 # Load necessary libraries
