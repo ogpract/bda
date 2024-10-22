@@ -1,5 +1,6 @@
 One Time Query
 ```bash
+install.packages("dplyr")
 library(dplyr)
 data(mtcars)
 query_condition <- mtcars %>%
@@ -9,7 +10,6 @@ print(query_condition)
 
 adhoc query
 ```bash
-install.packages("dplyr")
 library(dplyr)
 data(mtcars)
 ad_hoc_query_result <- mtcars %>%
@@ -21,7 +21,6 @@ print(ad_hoc_query_result)
 
 continuous query
 ```bash
-install.packages("dplyr")
 library(dplyr)
 data(mtcars)
 perform_continuous_query <- function(data, cylinder_count = 6, interval = 5) {
